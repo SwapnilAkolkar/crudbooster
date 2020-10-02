@@ -54,8 +54,17 @@ trait Query
             }
 
             // Query From Type
+            
+    //Following edit is for fixing the SQLSTATE[23000]: Integrity constraint violation: 1052 Column Error
+    // this error occures when you try to add the dependancy list feature in the Module Generation
+    // this edit is done in 3 files 
+    //1. this file (Query.php) full path : src\controllers\traits\Query.php
+    //2. TypesHook.php  src\types\TypesHook.php
+    //3. Hook.php full path: src\types\select_table\Hook.php
+           if($column->getType()=='select_table')
+            $query = getTypeHook($column->getType())->query2($query, $column, $this->data['table']);
+            else
             $query = getTypeHook($column->getType())->query($query, $column);
-
             // Filter Query From Type
             $filterValue = request("filter_".slug($column->getFilterColumn(),"_"));
             if(is_array($filterValue) || sanitizeXSS($filterValue)) {
