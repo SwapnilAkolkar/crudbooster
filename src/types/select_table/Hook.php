@@ -25,6 +25,21 @@ class Hook extends TypesHook
         }
         return $query;
     }
+    
+    //Following edit is for fixing the SQLSTATE[23000]: Integrity constraint violation: 1052 Column Error
+    // this error occures when you try to add the dependancy list feature in the Module Generation
+    // this edit is done in 3 files 
+    //1. Query.php full path : src\controllers\traits\Query.php
+    //2. TypesHook.php  src\types\TypesHook.php
+    //3. this file (Hook.php) full path: src\types\select_table\Hook.php
+    public function query2($query, $column, $mytable)
+    {
+        if($option = $column->getOptionsFromTable()) {
+            $query->leftjoin($option["table"],$option["table"].'.'.$option["primary_key"],"=", $mytable.'.'.$column->getField());
+            $query->addSelect($option['table'].'.'.$option['display_field'].' as '.$option['table'].'_'.$option['display_field']);
+        }
+        return $query;
+    }
 
     /**
      * @param $row
