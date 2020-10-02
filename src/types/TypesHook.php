@@ -44,6 +44,18 @@ class TypesHook implements TypesHookInterface
         return $query;
     }
 
+    
+    //Following edit  the function query2() is for fixing the SQLSTATE[23000]: Integrity constraint violation: 1052 Column Error
+    // this error occures when you try to add the dependancy list feature in the Module Generation
+    // this edit is done in 3 files 
+    //1. Query.php full path : src\controllers\traits\Query.php
+    //2. this file (TypesHook.php)  src\types\TypesHook.php
+    //3. Hook.php full path: src\types\select_table\Hook.php
+    public function query2($query, $column, $mytable)
+    {
+        return $query;
+    }
+    
     /**
      * @param \Illuminate\Database\Query\Builder $query
      * @param mixed|ColumnModel $column
